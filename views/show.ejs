@@ -1,0 +1,53 @@
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+    <h1>Data</h1>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Email</th>
+                                <th scope="col">Full Name</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">Gender</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <% for(var i = 0; i < data.length; i++){  %>
+                            <tr>
+                                <td>
+                                    <%= data[i].email  %>
+                                </td>
+                                <td>
+                                    <%=  data[i].firstName +" "+ data[i].lastName %>
+                                </td>
+                                
+                                <td>
+                                    <%=  data[i].age %>
+                                </td>
+                                <td>
+                                    <%=  data[i].gender %>
+                                </td>
+                                <td>
+                                    <%=  data[i].status %>
+                                </td>
+                                
+                            </tr>
+                            <% } %>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<%- include('partials/footer') %>
