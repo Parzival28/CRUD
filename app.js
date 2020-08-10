@@ -75,17 +75,29 @@ app.post("/update", (req, res) => {
         "age": req.body.age,
         "status": req.body.status}
     }, (err) => {
-        console.log('====================================');
-        console.log(Data);
-        console.log('====================================');
         if (err) {
-            console.log('-----------error-------------', err);
+            console.log(err);
         } else {
-            console.log("-----------------Updated----------------");
+            console.log("Updated");
         }
     })
     res.redirect("/update");
 });
+
+app.get('/delete', (req, res) => {
+    res.render('delete')
+})
+
+app.post('/delete', (req, res) => {
+    Data.deleteOne({firstName: req.body.fname}, (err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('deleted');
+        }
+    })
+    res.redirect('/delete')
+})
 
 app.listen(3000, () => {
     console.log("App is running on port 3000");
