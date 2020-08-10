@@ -65,8 +65,8 @@ app.get("/update", (req, res) => {
     res.render("update");
 });
 
-app.post("/update", (req, res) => {
-    Data.findOneAndUpdate({ firstName: req.body.updatefname}, { 
+app.post("/update", async (req, res) => {
+    await Data.findOneAndUpdate({ firstName: req.body.updatefname}, { 
       "$set" :{ "email": req.body.email,
         "password": req.body.password,
         "firstName": req.body.fname,
@@ -88,8 +88,8 @@ app.get('/delete', (req, res) => {
     res.render('delete')
 })
 
-app.post('/delete', (req, res) => {
-    Data.deleteOne({firstName: req.body.fname}, (err) => {
+app.post('/delete', async (req, res) => {
+    await Data.deleteOne({firstName: req.body.fname}, (err) => {
         if (err) {
             console.log(err);
         } else {
