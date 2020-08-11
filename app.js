@@ -2,6 +2,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
+const encrypt = require('mongoose-encryption')
+
+var bunyan = require('bunyan');
+var log = bunyan.createLogger({name: "CRUD"});
 
 mongoose.connect("mongodb://localhost:27017/crudDATA");
 const app = express();
@@ -13,7 +17,16 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static("public"));
 
-const dataSchema = {
+// const dataSchema = {
+//     email: String,
+//     password: String,
+//     firstName: String,
+//     lastName: String,
+//     age: Number,
+//     gender: String,
+//     status: String,
+// };
+const dataSchema = new mongoose.Schema({
     email: String,
     password: String,
     firstName: String,
@@ -21,7 +34,11 @@ const dataSchema = {
     age: Number,
     gender: String,
     status: String,
-};
+});
+
+const secret = "thisissecretkey.";
+dataSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"]});
+
 
 const Data = mongoose.model("CrudDATA", dataSchema);
 
@@ -53,10 +70,14 @@ app.post("/", async (req, res) => {
 
 app.get("/show", async (req, res) => {
     await Data.find((err, data) => {
-        console.log(data);
-        res.render("show", {
-            data: data,
-        });
+        if (!err) {
+            console.log(data);
+            res.render("show", {
+                data: data,
+            });   
+        } else {
+            log.info(err)
+        }
     });
 });
 
@@ -76,6 +97,7 @@ app.post("/update", async (req, res) => {
         "status": req.body.status}
     }, (err) => {
         if (err) {
+            log.info(err)
             console.log(err);
         } else {
             console.log("Updated");
@@ -91,6 +113,7 @@ app.get('/delete', (req, res) => {
 app.post('/delete', async (req, res) => {
     await Data.deleteOne({firstName: req.body.fname}, (err) => {
         if (err) {
+            log.info(err)
             console.log(err);
         } else {
             console.log('deleted');
